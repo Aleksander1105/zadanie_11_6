@@ -33,17 +33,17 @@ $(function() {
 				});
 
 			    // CONSTRUCTION COLUMN ELEMENT
-			$column.append($columnTitle),
-				   .append(columnDelete),
-				   .append(AddCard),
-				   .append(CardList),
+			$column.append($columnTitle)
+				   .append($columnDelete)
+				   .append($columnAddCard)
+				   .append($columnCardList);
 
 			    // RETURN OF CREATED COLUMN
 			return $column;
 		}   
 
 		//ADD PROTOTYPES
-		Column.prototype {
+		Column.prototype = {
 			addCard: function(card) {
 				this.$element.children('ul').append(card.$element);
 			},
@@ -127,4 +127,4 @@ $(function() {
 	// ADDING CARDS TO COLUMNS
 	todoColumn.addCard(card1);
 	doingColumn.addCard(card2);
-})
+});

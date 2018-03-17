@@ -41,7 +41,7 @@ $(function() {
 			    // RETURN OF CREATED COLUMN
 			return $column;
 		}   
-
+	}
 		//ADD PROTOTYPES
 		Column.prototype = {
 			addCard: function(card) {
@@ -52,8 +52,6 @@ $(function() {
 				this.$element.remove();
 			}
 		}; 
-
-	}
 
 	function Card(description) {
 		var self = this;
@@ -114,7 +112,7 @@ $(function() {
 	var todoColumn = new Column('To do');
 	var doingColumn = new Column('Doing');
 	var doneColumn = new Column('Done');
-
+	console.log(this);
 	// ADDING COLUMNS TO THE BOARD
 	board.addColumn(todoColumn);
 	board.addColumn(doingColumn);

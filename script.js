@@ -112,7 +112,6 @@ $(function() {
 	var todoColumn = new Column('To do');
 	var doingColumn = new Column('Doing');
 	var doneColumn = new Column('Done');
-	console.log(this);
 	// ADDING COLUMNS TO THE BOARD
 	board.addColumn(todoColumn);
 	board.addColumn(doingColumn);

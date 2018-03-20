@@ -1,0 +1,75 @@
+.board {
+	background: linear-gradient(red, yellow, red);
+	font-family: 'Anton', sans-serif;
+	height: 60vh;
+}
+
+h1 {
+	font-size: 36px;
+	color: #fff;
+	text-shadow: 2px 2px 4px #000;
+	padding: 10px;
+}
+
+.create-column {
+	padding: 10px;
+	background-color: #000;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	margin: 5px;
+	box-shadow: #000 2px 2px 5px;
+}
+
+.column-container {
+	display: inline-flex;
+}
+
+.column {
+	padding: 30px;
+	text-align: center;
+}
+
+h2 {
+	font-size: 22px;
+	color: #fff;
+	text-shadow: 2px 2px 4px #000;
+	padding: 5px;
+	display: flex;
+	justify-content: center;
+	margin: 10px 0;
+}
+ 
+.btn-delete {
+	padding: 5px;
+	background-color: #000;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	margin: 5px;
+	box-shadow: #000 2px 2px 5px;
+}
+
+.card {
+	border: 1px solid #000;
+	margin: 5px 0;
+}
+
+.add-card {
+	margin: 0 5px;
+	padding: 5px;
+	background-color: #000;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	box-shadow: #000 2px 2px 5px;
+}
+
+.card-description {
+	float: right;
+	padding: 10px 0;
+	width: 150px;
+	height: 10px;
+	margin: 0 10px;
+	text-align: left;
+}

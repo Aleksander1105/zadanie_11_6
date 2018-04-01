@@ -1,19 +1,41 @@
 $(function() {
-	function randomString() {
-		var chars = '0123456789abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXTZ';
-		var str = '';
-		for (var i = 0; i < 10; i++ ) {
-			str += chars[Math.floor(Math.random() * chars.length)];
-		}
-		return str;
+	var baseUrl = 'https://kodilla.com/pl/bootcamp-api';
+	var myHeaders = {
+  		'X-Client-Id': 3049,
+  		'X-Auth-Token': 'ad79e81ba3e90534c834ba2eded85718'
+	};
 
+	$.ajaxSetup({
+		headers: myHeaders
+	});
+
+	$.ajax({
+    	url: baseUrl + '/board',
+    	method: 'GET',
+    	success: function(response) {
+      		setupColumns(response.columns);
+    	}
+	});
+
+	function setupColumns(columns) {
+    	columns.forEach(function (column) {
+    		var col = new Column(column.id, column.name);
+        	board.createColumn(col);
+        	setupCards(col, column.cards);
+    	});
 	}
 
-	function Column(name) {
+	function setupCards(col, cards) {
+		cards.forEach(function (card) {
+			var cardObj = new Card(card.id, card.name, card.bootcamp_kanban_column_id);
+			col.createCard(cardObj);
+		})
+	}
+
+	function Column(id, name) {
 		var self = this;
-		this.id = randomString();
-		this.name = name;
-		this.$element = createColumn(); 
+		this.id = id;
+    	this.name = name || 'No name given';
 
 		function createColumn() {
 			    // CREATING COMPONENTS OF COLUMNS
@@ -25,11 +47,24 @@ $(function() {
 
 			    // ADDING EVENTS	
 			$columnDelete.click(function() {
-				self.removeColumn();
+				self.deleteColumn();
 			});
 
 				$columnAddCard.click(function(event) {
-					self.addCard(new Card(prompt('Enter the name of the card')));
+					var cardName = prompt("Enter the name of the card");
+					event.preventDefault();
+					$.ajax({
+    					url: baseUrl + '/card',
+    					method: 'POST',
+    					data: {
+    						name: cardName,
+    						bootcamp_kanban_column_id: self.id
+    					},
+    					success: function(response) {
+        					var card = new Card(response.id, cardName);
+        					self.createCard(card);
+    					}
+					});
 				});
 
 			    // CONSTRUCTION COLUMN ELEMENT
@@ -48,22 +83,27 @@ $(function() {
 				this.$element.children('ul').append(card.$element);
 			},
 
-			removeColumn: function() {
-				this.$element.remove();
-			}
+			deleteColumn: function() {
+    			var self = this;
+    			$.ajax({
+      				url: baseUrl + '/column/' + self.id,
+      				method: 'DELETE',
+      				success: function(response){
+        				self.element.remove();
+      				}
+    			});
+ 			}
 		}; 
 
-	function Card(description) {
+	function Card(id, name) {
 		var self = this;
-
-		this.id = randomString();
-		this.description = description;
-		this.$element = createCard();
+		this.id = id;
+		this.name = name || 'No name given';
 
 		function createCard() {
 			// CREATING THE BLOCKS
     		var $card = $('<li>').addClass('card');
-    		var $cardDescription = $('<p>').addClass('card-description').text(self.description);
+    		var $cardDescription = $('<p>').addClass('card-description').text(self.name);
     		var $cardDelete = $('<button>').addClass('btn-delete').text('x');
 
     		// BINDING TO CLICK EVENT
@@ -80,7 +120,14 @@ $(function() {
 
 		Card.prototype = {
 			removeCard: function() {
-				this.$element.remove();
+				var self = this;
+    			$.ajax({
+      				url: baseUrl + '/card/' + self.id,
+      				method: 'DELETE',
+      				success: function(){
+        				self.$element.remove();
+      				}
+    			});
 			}
 		}
 	}
@@ -101,28 +148,18 @@ $(function() {
    		}).disableSelection();
  	}
 
- 	$('.create-column')
-  		.click(function(){
-		var name = prompt('Enter a column name');
-		var column = new Column(name);
-    	board.addColumn(column);
+ 	$('.create-column').click(function(){
+		var columnName = prompt('Enter a column name');
+		$.ajax({
+    		url: baseUrl + '/column',
+    		method: 'POST',
+    		data: {
+            	name: columnName
+    		},
+    		success: function(response){
+    			var column = new Column(response.id, columnName);
+    			board.createColumn(column);
+          	}
+        });
  	});
-
-  	// CREATING COLUMNS
-	var todoColumn = new Column('To do');
-	var doingColumn = new Column('Doing');
-	var doneColumn = new Column('Done');
-	console.log(this);
-	// ADDING COLUMNS TO THE BOARD
-	board.addColumn(todoColumn);
-	board.addColumn(doingColumn);
-	board.addColumn(doneColumn);
-
-	// CREATING CARDS
-	var card1 = new Card('New task');
-	var card2 = new Card('Create kanban boards');
-
-	// ADDING CARDS TO COLUMNS
-	todoColumn.addCard(card1);
-	doingColumn.addCard(card2);
 });

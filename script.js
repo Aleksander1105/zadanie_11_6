@@ -46,11 +46,11 @@ $(function() {
 			var $columnAddCard = $('<button>').addClass('add-card').text('Add a card');
 
 			    // ADDING EVENTS	
-			$columnDelete.click(function() {
+			$columnDelete.on('click', function() {
 				self.deleteColumn();
 			});
 
-				$columnAddCard.click(function(event) {
+				$columnAddCard.on('click', function(event) {
 					var cardName = prompt("Enter the name of the card");
 					event.preventDefault();
 					$.ajax({
@@ -107,7 +107,7 @@ $(function() {
     		var $cardDelete = $('<button>').addClass('btn-delete').text('x');
 
     		// BINDING TO CLICK EVENT
-    		$cardDelete.click(function(){
+    		$cardDelete.on('click', function(){
         		self.removeCard();
 			});
 
@@ -148,7 +148,7 @@ $(function() {
    		}).disableSelection();
  	}
 
- 	$('.create-column').click(function(){
+ 	$('.create-column').on('click', function(){
 		var columnName = prompt('Enter a column name');
 		$.ajax({
     		url: baseUrl + '/column',

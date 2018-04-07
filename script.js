@@ -20,7 +20,7 @@ $(function() {
 	function setupColumns(columns) {
     	columns.forEach(function (column) {
     		var col = new Column(column.id, column.name);
-        	board.createColumn(col);
+        	board.addColumn(col);
         	setupCards(col, column.cards);
     	});
 	}
@@ -28,7 +28,7 @@ $(function() {
 	function setupCards(col, cards) {
 		cards.forEach(function (card) {
 			var cardObj = new Card(card.id, card.name, card.bootcamp_kanban_column_id);
-			col.createCard(cardObj);
+			col.addCard(cardObj);
 		})
 	}
 
@@ -36,6 +36,7 @@ $(function() {
 		var self = this;
 		this.id = id;
     	this.name = name || 'No name given';
+    	this.$element = createColumn();
 
 		function createColumn() {
 			    // CREATING COMPONENTS OF COLUMNS
@@ -62,7 +63,7 @@ $(function() {
     					},
     					success: function(response) {
         					var card = new Card(response.id, cardName);
-        					self.createCard(card);
+        					self.addCard(card);
     					}
 					});
 				});
@@ -89,7 +90,7 @@ $(function() {
       				url: baseUrl + '/column/' + self.id,
       				method: 'DELETE',
       				success: function(response){
-        				self.element.remove();
+        				self.$element.remove();
       				}
     			});
  			}
@@ -99,6 +100,7 @@ $(function() {
 		var self = this;
 		this.id = id;
 		this.name = name || 'No name given';
+		this.$element = createCard();
 
 		function createCard() {
 			// CREATING THE BLOCKS
@@ -137,6 +139,7 @@ $(function() {
 		addColumn: function(column) {
 			this.$element.append(column.$element);
 			initSortable();
+			console.log(this, column);
 		},
 		$element: $('#board .column-container')
 	};
@@ -158,7 +161,7 @@ $(function() {
     		},
     		success: function(response){
     			var column = new Column(response.id, columnName);
-    			board.createColumn(column);
+    			board.addColumn(column);
           	}
         });
  	});
